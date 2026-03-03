@@ -54,5 +54,21 @@ pipeline {
                 }
             }
         }
+        stage('Docker_push') {
+  steps {
+    container('docker') {
+      withCredentials([usernamePassword(
+          credentialsId: 'DockerHub', 
+          usernameVariable: 'DOCKER_USER', 
+          passwordVariable: 'DOCKER_PASS'
+      )]) {
+        sh "echo \$DOCKER_PASS | docker login -u \$DOCKER_USER --password-stdin"
+        def imageName = "\$DOCKER_USER/tema23itschool:\${env.BUILD_NUMBER}"
+        sh "docker tag tema23itschool:\${env.BUILD_NUMBER} \$imageName"
+        sh "docker push \$imageName"
+      }
+    }
+  }
+}
     }
 }
