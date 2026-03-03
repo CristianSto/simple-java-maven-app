@@ -49,7 +49,8 @@ pipeline {
         stage('Docker') { 
             steps {
                 container('docker') {
-                    sh 'docker ps';
+                    sh "docker build -t tema23itschool:${env.BUILD_NUMBER} .";
+                    sh "docker images";
                 }
             }
         }
